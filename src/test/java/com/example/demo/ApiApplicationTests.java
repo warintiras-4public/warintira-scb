@@ -14,8 +14,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+// import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -29,23 +32,12 @@ public class ApiApplicationTests {
 	private ApiService service;
 
 	@Test
-	public void helloTest() throws Exception {
-		when(service.hello()).thenReturn("Hello, Mock");
-		this.mockMvc
-			.perform(get("/hello"))
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("Hello, Mock")));
-	}
-
-	@Test
 	public void encodeTest() throws Exception {
-		String result = "b->k->l->k";
-		when(service.encode(anyString())).thenReturn(result);
+		LinkList linkList = new LinkList();
+		linkList.setLinkList("SW");
 		this.mockMvc
-			.perform(post("/encode").contentType(MediaType.APPLICATION_JSON).content("Sk"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString(result)));
-			verify(service).encode("Sk");
+			.perform(post("/encode").contentType(MediaType.APPLICATION_JSON).content(json(linkList)))
+			.andDo(print())
+			.andExpect(status().isOk());
 		}
 }
